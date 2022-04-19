@@ -7,5 +7,5 @@ import com.mercadolivro.model.request.PutCustomerRequest
 fun PostCustomerRequest.toCustomerModel(): CustomerModel =
     CustomerModel(name = this.name, email = this.email)
 
-fun PutCustomerRequest.toCustomerModel(id: String): CustomerModel =
+fun PutCustomerRequest.toCustomerModel(id: Int): CustomerModel =
     CustomerModel(id = id, name = this.name, email = this.email)
