@@ -25,13 +25,13 @@ class BookService(
     fun findActives(pageable: Pageable): Page<BookModel> =
         bookRepository.findByStatus(BookStatus.ATIVO, pageable)
 
-    fun findById(id: Int): BookModel? =
+    fun findById(id: Int): BookModel =
         bookRepository.findById(id).orElseThrow { NotFoundException(Errors.ML101.message.format(id), Errors.ML101.code) }
 
     fun delete(id: Int) {
         val book = findById(id)
 
-        book?.let {
+        book.let {
             it.status = BookStatus.CANCELADO
             update(it)
         }
@@ -46,6 +46,17 @@ class BookService(
 
         books.forEach {
             it.status = BookStatus.DELETADO
+        }
+
+        bookRepository.saveAll(books)
+    }
+
+    fun findAllById(bookIds: Set<Int>): List<BookModel> =
+        bookRepository.findAllById(bookIds)
+
+    fun purchase(books: MutableList<BookModel>) {
+        books.map {
+            it.status = BookStatus.VENDIDO
         }
 
         bookRepository.saveAll(books)
